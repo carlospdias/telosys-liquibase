@@ -2,12 +2,19 @@
   #set( $user = "Velocity" )
   #foreach( $entity in $model.allEntites)
   
-  <changeSet  id="create-table-$entity.sqlTableName"  author="$user">
+  <changeSet  author="$user"  id="create-sequence-$entity.sqlTableName">  
+    <createSequence cycle="false" incrementBy="1" ordered="true"  sequenceName="sq_$fn.toLowerCase($entity.sqlTableName)"  startValue="1"/>  
+  </changeSet>
+
+  <changeSet  id="create-table-$fn.toLowerCase($entity.sqlTableName)"  author="$user">
     <createTable  tableName="$entity.sqlTableName">  
   #foreach( $attribute in $entity.attributes )
     <column  name="$attribute.sqlColumnName"  type="$attribute.sqlColumnType"/>
   #end
   </createTable>
+    <rollback>
+      drop table $entity.sqlTableName
+    </rollback>
   </changeSet>
   
   #if( $entity.hasPrimaryKey() )
