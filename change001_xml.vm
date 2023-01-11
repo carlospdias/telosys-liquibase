@@ -1,0 +1,3 @@
+#include( "/includes/cabecalho.xml.txt")
+
+#include( "/includes/rodape.xml.txt")
